@@ -24,10 +24,13 @@ async function connectToWhatsapp() {
     // Event listener untuk memperbarui status koneksi
     socket.ev.on("connection.update", async ({ connection }) => {
         if (connection === 'open') {
-            console.log("Koneksi terbuka 🚀");
+            console.log("Connection open");
         } else if (connection === 'close') {
+            console.log('Reconnecting...');
             // Menghubungkan kembali jika koneksi ditutup
             await connectToWhatsapp();
+        } else if (connection == 'connecting'){
+            console.log('Waiting for connection...');
         }
     });
 
