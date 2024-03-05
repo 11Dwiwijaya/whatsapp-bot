@@ -71,7 +71,7 @@ async function connectToWhatsapp() {
                     author: 'wangsaff',
                     type: StickerTypes.FULL,
                     background: 'transparent',
-                    quality: 50
+                    quality: 100
                 };
                 
                 // Generate sticker
