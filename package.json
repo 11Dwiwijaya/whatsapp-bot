@@ -1,8 +1,10 @@
 {
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@whiskeysockets/baileys": "^6.6.0",
+    "avconv": "^3.1.0",
     "pino": "^8.19.0",
     "qrcode-terminal": "^0.12.0",
-    "wa-sticker-formatter": "^4.4.4"
+    "wa-sticker-formatter": "^4.3.2"
   }
 }

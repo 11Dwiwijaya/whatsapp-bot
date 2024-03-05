@@ -1,7 +1,6 @@
 const { makeWASocket, useMultiFileAuthState, downloadContentFromMessage } = require('@whiskeysockets/baileys');
 const pino = require('pino');
-const { createSticker, StickerTypes } = require('wa-sticker-formatter');
-const { generate } = require('qrcode-terminal');
+const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter');
 
 /**
  * Fungsi untuk menghubungkan ke WhatsApp menggunakan BAILEYS.
@@ -51,30 +50,40 @@ async function connectToWhatsapp() {
             await socket.sendMessage(chat.key.remoteJid, { text: "Hello, world!" }, { quoted: chat });
         }
         // Membuat stiker jika pesan adalah gambar dengan keterangan '.sticker'
-        else if (chat.message?.imageMessage?.caption == '.sticker' && chat.message?.imageMessage) {
+        else if ((chat.message?.imageMessage?.caption == '.sticker' && chat.message?.imageMessage) || (chat.message?.videoMessage?.caption == '.sticker' && chat.message?.videoMessage)) {
             // Fungsi untuk mendapatkan media (gambar) dari pesan
-            const getMedia = async (msg) => {
-                const msgType = Object.keys(msg?.message)[0];
-                const stream = await downloadContentFromMessage(msg.message[msgType], msgType.replace("Message", ''));
-                let buffer = Buffer.from([]);
-                for await (const chunk of stream) {
-                    buffer = Buffer.concat([buffer, chunk]);
-                }
-                return buffer;
-            };
-            const mediaData = await getMedia(chat);
-
-            // Opsi stiker
-            const stickerOption = {
-                pack: 'wangsaff',
-                author: 'wangsaff',
-                type: StickerTypes.FULL,
-                quality: 50
-            };
-
-            // Membuat stiker
-            const generateSticker = await createSticker(mediaData, stickerOption);
-            await socket.sendMessage(chat.key.remoteJid, { sticker: generateSticker });
+            try {
+                const getMedia = async (msg) => {
+                    const msgType = Object.keys(msg?.message)[0];
+                    const stream = await downloadContentFromMessage(msg.message[msgType], msgType.replace("Message", ''));
+                    let buffer = Buffer.from([]);
+                    for await (const chunk of stream) {
+                        buffer = Buffer.concat([buffer, chunk]);
+                    }
+                    return buffer;
+                };
+                
+                const mediaData = await getMedia(chat);
+                
+                // Sticker options
+                const stickerOption = {
+                    pack: 'wangsaff',
+                    author: 'wangsaff',
+                    type: StickerTypes.FULL,
+                    background: 'transparent',
+                    quality: 50
+                };
+                
+                // Generate sticker
+                const generateSticker = await createSticker(mediaData, stickerOption);
+                await socket.sendMessage(chat.key.remoteJid, { sticker: generateSticker }, { quoted: chat });
+            } catch (error) {
+                // Handle errors here
+                console.error('Error:', error);
+                // You can also send an error message to the user if needed
+                await socket.sendMessage(chat.key.remoteJid, { text: `An error occurred: ${error.message} ` }, { quoted: chat });
+            }
+            
         }
     });
 }
