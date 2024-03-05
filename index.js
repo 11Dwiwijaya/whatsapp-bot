@@ -70,7 +70,7 @@ async function connectToWhatsapp() {
                     pack: 'wangsaff',
                     author: 'wangsaff',
                     type: StickerTypes.FULL,
-                    background: 'transparent',
+                    background: '#00FFFFFF',
                     quality: 100
                 };
                 
