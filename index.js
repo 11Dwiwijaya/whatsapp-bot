@@ -52,14 +52,13 @@ The bot is online and responsive. `;
             await socket.sendMessage(chat.key.remoteJid, { text: textMsg }, { quoted: chat });
         }
         else if(pesan === '.help'){
-          let textMsg  = `*🤖 How to Use the Bot* 
-Here are the available commands:
+          let textMsg  = `*Here are the available commands* :
 
 1. *.help*: Display available commands.
 2. *.ping*: Check if the bot is online and responsive.
 3. *.sticker* [with media]: Convert media into stickers.
 
-Feel free to explore these commands or type /help again if you need assistance.`;
+Feel free to explore these commands or type .help again if you need assistance.`;
 
           await socket.sendMessage(chat.key.remoteJid, { text: textMsg }, { quoted: chat });
 
