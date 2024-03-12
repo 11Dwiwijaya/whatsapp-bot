@@ -47,7 +47,22 @@ async function connectToWhatsapp() {
 
         // Menanggapi pesan .ping
         if (pesan === '.ping') {
-            await socket.sendMessage(chat.key.remoteJid, { text: "Hello, world!" }, { quoted: chat });
+            let textMsg  = `*PONG!* 🏓
+The bot is online and responsive. `;
+            await socket.sendMessage(chat.key.remoteJid, { text: textMsg }, { quoted: chat });
+        }
+        else if(pesan === '.help'){
+          let textMsg  = `*🤖 How to Use the Bot* 
+Here are the available commands:
+
+1. *.help*: Display available commands.
+2. *.ping*: Check if the bot is online and responsive.
+3. *.sticker* [with media]: Convert media into stickers.
+
+Feel free to explore these commands or type /help again if you need assistance.`;
+
+          await socket.sendMessage(chat.key.remoteJid, { text: textMsg }, { quoted: chat });
+
         }
         // Membuat stiker jika pesan adalah gambar dengan keterangan '.sticker'
         else if ((chat.message?.imageMessage?.caption == '.sticker' && chat.message?.imageMessage) || (chat.message?.videoMessage?.caption == '.sticker' && chat.message?.videoMessage)) {
